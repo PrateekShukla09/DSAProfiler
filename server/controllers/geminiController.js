@@ -47,6 +47,24 @@ export const analyzeProgress = async (req, res) => {
         // 2. Prepare Data & Calculate Weighted Scores
         const stats = student.stats;
         const totalGlobalSolved = stats.totalSolved || 1;
+
+        // Determine dynamic thresholds based on experience
+        let volumeDivisor = 35;
+        let strengthThreshold = 0.73;
+
+        if (totalGlobalSolved > 1000) {
+            volumeDivisor = 150;
+            strengthThreshold = 0.91;
+        } else if (totalGlobalSolved > 700) {
+            volumeDivisor = 120;
+            strengthThreshold = 0.86;
+        } else if (totalGlobalSolved > 500) {
+            volumeDivisor = 95;
+            strengthThreshold = 0.81;
+        } else if (totalGlobalSolved >= 300) {
+            volumeDivisor = 50;
+            strengthThreshold = 0.75;
+        }
         const easyRatio = (stats.easySolved || 0) / totalGlobalSolved;
         const mediumRatio = (stats.mediumSolved || 0) / totalGlobalSolved;
         const hardRatio = (stats.hardSolved || 0) / totalGlobalSolved;
@@ -76,15 +94,15 @@ export const analyzeProgress = async (req, res) => {
             // Normalize Metrics
             const accuracyScore = topicAccuracy / 100;
             const difficultyScore = totalSolved > 0 ? (mediumSolved + 2 * hardSolved) / totalSolved : 0;
-            const volumeScore = Math.min(totalSolved / 40, 1);
+            const volumeScore = Math.min(totalSolved / volumeDivisor, 1);
 
             // Topic Strength Score Formula
-            // topicStrengthScore = (0.45 * accuracyScore) + (0.35 * difficultyScore) + (0.20 * volumeScore)
-            let score = (0.45 * accuracyScore) + (0.35 * difficultyScore) + (0.20 * volumeScore);
+            // topicStrengthScore = (0.20 * accuracyScore) + (0.35 * difficultyScore) + (0.45 * volumeScore)
+            let score = (0.20 * accuracyScore) + (0.35 * difficultyScore) + (0.45 * volumeScore);
             score = parseFloat(score.toFixed(2));
 
             let classification = "Weak Topic";
-            if (score > 0.80) classification = "Strong Topic";
+            if (score > strengthThreshold) classification = "Strong Topic";
 
             return {
                 topicName: t.tagName,
@@ -147,16 +165,16 @@ export const analyzeProgress = async (req, res) => {
         (Medium + 2 × Hard) / Total
 
         4. Volume Score:
-        min(Total / 40, 1)
+        min(Total / ${volumeDivisor}, 1)
 
         5. Final Topic Strength Score:
-        (0.45 × normalizedAccuracy) +
+        (0.20 × normalizedAccuracy) +
         (0.35 × difficultyScore) +
-        (0.20 × volumeScore)
+        (0.45 × volumeScore)
 
         Topic Classification:
-        - Score > 0.80 → Strong Topic
-        - Score <= 0.80 → Weak Topic
+        - Score > ${strengthThreshold} → Strong Topic
+        - Score <= ${strengthThreshold} → Weak Topic
 
         --------------------------------------------------
         INPUT DATA

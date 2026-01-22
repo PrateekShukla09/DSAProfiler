@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
+import API_URL from '../config';
 import Navbar from '../components/Navbar';
 import SpotlightCard from '../components/SpotlightCard';
 import clsx from 'clsx';
@@ -17,7 +18,7 @@ const AdminSheets = () => {
         const fetchSheets = async () => {
             try {
                 const token = localStorage.getItem('dsa_token');
-                const { data } = await axios.get('http://localhost:5000/api/sheets', {
+                const { data } = await axios.get(`${API_URL}/api/sheets`, {
                     headers: { Authorization: `Bearer ${token}` }
                 });
                 setSheets(data);
@@ -36,7 +37,7 @@ const AdminSheets = () => {
             setLoading(true);
             try {
                 const token = localStorage.getItem('dsa_token');
-                const { data } = await axios.get(`http://localhost:5000/api/sheets/admin/progress/${encodeURIComponent(activeSheet)}`, {
+                const { data } = await axios.get(`${API_URL}/api/sheets/admin/progress/${encodeURIComponent(activeSheet)}`, {
                     headers: { Authorization: `Bearer ${token}` }
                 });
 

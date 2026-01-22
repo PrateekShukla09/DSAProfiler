@@ -1,5 +1,6 @@
 import { createContext, useState, useEffect, useContext } from 'react';
 import axios from 'axios';
+import API_URL from '../config';
 
 const AuthContext = createContext();
 
@@ -20,7 +21,7 @@ export const AuthProvider = ({ children }) => {
 
     const login = async (libraryId, password) => {
         try {
-            const { data } = await axios.post('http://localhost:5000/api/auth/login', { libraryId, password });
+            const { data } = await axios.post(`${API_URL}/api/auth/login`, { libraryId, password });
             setUser(data);
             localStorage.setItem('dsa_user', JSON.stringify(data));
             localStorage.setItem('dsa_token', data.token);
@@ -35,7 +36,7 @@ export const AuthProvider = ({ children }) => {
 
     const adminLogin = async (username, password) => {
         try {
-            const { data } = await axios.post('http://localhost:5000/api/auth/admin/login', { username, password });
+            const { data } = await axios.post(`${API_URL}/api/auth/admin/login`, { username, password });
             setUser({ ...data, role: 'admin' });
             localStorage.setItem('dsa_user', JSON.stringify({ ...data, role: 'admin' }));
             localStorage.setItem('dsa_token', data.token);

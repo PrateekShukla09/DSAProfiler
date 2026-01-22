@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
+import API_URL from '../config';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ChevronDown, ChevronUp, ExternalLink, CheckCircle, Circle } from 'lucide-react';
 import clsx from 'clsx';
@@ -17,10 +18,10 @@ const SheetView = ({ sheetName, studentId }) => {
             try {
                 const token = localStorage.getItem('dsa_token');
                 const [contentRes, progressRes] = await Promise.all([
-                    axios.get(`http://localhost:5000/api/sheets/${encodeURIComponent(sheetName)}`, {
+                    axios.get(`${API_URL}/api/sheets/${encodeURIComponent(sheetName)}`, {
                         headers: { Authorization: `Bearer ${token}` }
                     }),
-                    axios.get(`http://localhost:5000/api/sheets/${encodeURIComponent(sheetName)}/progress`, {
+                    axios.get(`${API_URL}/api/sheets/${encodeURIComponent(sheetName)}/progress`, {
                         headers: { Authorization: `Bearer ${token}` }
                     })
                 ]);
@@ -40,7 +41,7 @@ const SheetView = ({ sheetName, studentId }) => {
     const handleToggle = async (topic, problemId) => {
         try {
             const token = localStorage.getItem('dsa_token');
-            await axios.post('http://localhost:5000/api/sheets/update-progress', {
+            await axios.post(`${API_URL}/api/sheets/update-progress`, {
                 sheetName,
                 topic,
                 problemId

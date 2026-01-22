@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Navbar from '../components/Navbar';
 import axios from 'axios';
+import API_URL from '../config';
 // Imports
 import { UserPlus, User, Lock, BookOpen, Hash, AtSign, Trash2, RefreshCw } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
@@ -36,7 +37,7 @@ const AdminDashboard = () => {
     const fetchStudents = async () => {
         try {
             const token = localStorage.getItem('dsa_token');
-            const { data } = await axios.get('http://localhost:5000/api/admin/students', {
+            const { data } = await axios.get(`${API_URL}/api/admin/students`, {
                 headers: { Authorization: `Bearer ${token}` }
             });
             setStudents(data);
@@ -56,7 +57,7 @@ const AdminDashboard = () => {
         setMsg({ type: '', text: '' });
 
         try {
-            await axios.post('http://localhost:5000/api/auth/register', formData);
+            await axios.post(`${API_URL}/api/auth/register`, formData);
             setMsg({ type: 'success', text: 'Student added successfully!' });
             setFormData({
                 name: '',
@@ -78,7 +79,7 @@ const AdminDashboard = () => {
 
         try {
             const token = localStorage.getItem('dsa_token');
-            await axios.delete(`http://localhost:5000/api/admin/students/${id}`, {
+            await axios.delete(`${API_URL}/api/admin/students/${id}`, {
                 headers: { Authorization: `Bearer ${token}` }
             });
             fetchStudents();
@@ -102,7 +103,7 @@ const AdminDashboard = () => {
 
         try {
             const token = localStorage.getItem('dsa_token');
-            const { data } = await axios.post('http://localhost:5000/api/admin/refresh', {}, {
+            const { data } = await axios.post(`${API_URL}/api/admin/refresh`, {}, {
                 headers: { Authorization: `Bearer ${token}` }
             });
             setMsg({ type: 'success', text: data.message });

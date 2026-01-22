@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { useAuth } from '../context/AuthContext';
 import { useParams } from 'react-router-dom';
 import axios from 'axios';
+import API_URL from '../config';
 import Navbar from '../components/Navbar';
 import Heatmap from '../components/Heatmap';
 import TopicStats from '../components/TopicStats';
@@ -25,7 +26,7 @@ const Dashboard = () => {
         try {
             const token = localStorage.getItem('dsa_token');
             const { data } = await axios.post(
-                'http://localhost:5000/api/gemini/analyze-progress',
+                `${API_URL}/api/gemini/analyze-progress`,
                 {},
                 { headers: { Authorization: `Bearer ${token}` } }
             );
@@ -48,7 +49,7 @@ const Dashboard = () => {
             if (id) {
                 try {
                     const token = localStorage.getItem('dsa_token');
-                    const { data } = await axios.get(`http://localhost:5000/api/student/${id}`, {
+                    const { data } = await axios.get(`${API_URL}/api/student/${id}`, {
                         headers: { Authorization: `Bearer ${token}` }
                     });
                     setViewUser(data);
@@ -61,7 +62,7 @@ const Dashboard = () => {
                 // Fetch fresh profile for logged-in user
                 try {
                     const token = localStorage.getItem('dsa_token');
-                    const { data } = await axios.get('http://localhost:5000/api/student/profile', {
+                    const { data } = await axios.get(`${API_URL}/api/student/profile`, {
                         headers: { Authorization: `Bearer ${token}` }
                     });
                     setViewUser(data);

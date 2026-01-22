@@ -4,6 +4,7 @@ import SheetView from '../components/SheetView';
 import { motion } from 'framer-motion';
 import clsx from 'clsx';
 import axios from 'axios';
+import API_URL from '../config';
 
 const Sheets = () => {
     const [sheets, setSheets] = useState([]);
@@ -13,7 +14,7 @@ const Sheets = () => {
         const fetchSheets = async () => {
             try {
                 const token = localStorage.getItem('dsa_token');
-                const { data } = await axios.get('http://localhost:5000/api/sheets', {
+                const { data } = await axios.get(`${API_URL}/api/sheets`, {
                     headers: { Authorization: `Bearer ${token}` }
                 });
                 setSheets(data);

@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import axios from 'axios';
+import API_URL from '../config';
 import { User, Lock, Hash, AtSign, BookOpen, Layers } from 'lucide-react';
 import Background from '../components/Background';
 
@@ -27,7 +28,7 @@ const Register = () => {
         setError('');
 
         try {
-            const { data } = await axios.post('http://localhost:5000/api/auth/register', formData);
+            const { data } = await axios.post(`${API_URL}/api/auth/register`, formData);
             // Save token and redirect
             localStorage.setItem('dsa_token', data.token);
             localStorage.setItem('dsa_user', JSON.stringify(data));

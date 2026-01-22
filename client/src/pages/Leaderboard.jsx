@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import Navbar from '../components/Navbar';
 import axios from 'axios';
+import API_URL from '../config';
 import { Trophy, Filter, Search } from 'lucide-react';
 import clsx from 'clsx';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -43,7 +44,7 @@ const Leaderboard = () => {
             if (filterYear) params.year = filterYear;
             if (filterSection) params.section = filterSection;
 
-            const { data } = await axios.get('http://localhost:5000/api/student/leaderboard', { params });
+            const { data } = await axios.get(`${API_URL}/api/student/leaderboard`, { params });
 
             // Update cache
             leaderboardCache = {
