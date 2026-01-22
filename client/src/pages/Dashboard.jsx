@@ -186,7 +186,7 @@ const Dashboard = () => {
                                 {/* Chart - Centered in remaining space */}
                                 <div className="flex-1 flex items-center justify-center w-full relative">
                                     <div className="relative w-48 h-48">
-                                        <ResponsiveContainer width="100%" height="100%">
+                                        <ResponsiveContainer width="100%" height="100%" minWidth={100} minHeight={100}>
                                             <PieChart>
                                                 <Pie
                                                     data={data}
